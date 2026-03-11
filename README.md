@@ -5,9 +5,11 @@
 ## 功能特性
 
 - 支持 HTTP 请求代理转发
+- 支持 HTTPS (CONNECT 隧道)
 - 多线程处理并发连接
 - 支持常见的 HTTP 方法 (GET, POST, HEAD, PUT, DELETE 等)
 - 自动处理 hop-by-hop 头部
+- 支持 Content-Length 和 chunked 传输编码
 - 可配置的连接超时和缓冲区大小
 - 命令行参数支持
 - 可作模块使用
@@ -18,23 +20,7 @@
 # 从源码安装
 git clone https://github.com/hyang0/py-httproxy.git
 cd py-httproxy
-
 pip install -e .
-Looking in indexes: https://mirrors.aliyun.com/pypi/simple
-Obtaining file:///D:/gitRepo/py-httproxy
-  Installing build dependencies ... done
-  Checking if build backend supports build_editable ... done
-  Getting requirements to build editable ... done
-  Preparing editable metadata (pyproject.toml) ... done
-Building wheels for collected packages: httproxy
-  Building editable for httproxy (pyproject.toml) ... done
-  Created wheel for httproxy: filename=httproxy-0.1.0-0.editable-py3-none-any.wh
-l size=4436 sha256=db09c593
-736
-  Stored in directory: wheels\19\8e\80\9703837db
-Successfully built httproxy
-Installing collected packages: httproxy
-Successfully installed httproxy-0.1.0
 ```
 
 ## 使用方法
@@ -109,7 +95,7 @@ curl https://www.baidu.com
 
 # 使用 Python requests
 import requests
-proxies = {"http": "http://127.0.0.1:8080"}
+proxies = {"http": "http://127.0.0.1:8080", "https": "http://127.0.0.1:8080"}
 requests.get("https://www.baidu.com", proxies=proxies)
 ```
 
@@ -138,3 +124,6 @@ pip install -e ".[dev]"
 pytest tests/
 ```
 
+## License
+
+MIT

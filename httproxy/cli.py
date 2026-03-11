@@ -3,14 +3,14 @@
 import argparse
 import logging
 import sys
-from .server import HTTPProxyServer
+from .server import HTTPProxyServer, run_server
 
 
 def parse_args(args=None):
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
         prog="httproxy",
-        description="A simple multi-threaded HTTP proxy server.",
+        description="An async HTTP/HTTPS proxy server.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -53,17 +53,9 @@ Examples:
     )
 
     parser.add_argument(
-        "--buffer-size",
-        type=int,
-        default=8192,
-        metavar="BYTES",
-        help="buffer size for data transfer (default: 8192)"
-    )
-
-    parser.add_argument(
         "-v", "--version",
         action="version",
-        version="%(prog)s 0.1.0"
+        version="%(prog)s 0.1.1"
     )
 
     return parser.parse_args(args)
@@ -80,25 +72,11 @@ def main(args=None):
         datefmt="%Y-%m-%d %H:%M:%S"
     )
 
-    logger = logging.getLogger(__name__)
-    logger.info(f"Starting HTTP Proxy Server on {options.bind}:{options.port}")
-
-    server = HTTPProxyServer(
+    run_server(
         host=options.bind,
         port=options.port,
-        timeout=options.timeout,
-        buffer_size=options.buffer_size
+        timeout=options.timeout
     )
-
-    try:
-        server.start()
-    except KeyboardInterrupt:
-        logger.info("Received shutdown signal")
-    except Exception as e:
-        logger.error(f"Server error: {e}")
-        sys.exit(1)
-    finally:
-        server.stop()
 
 
 if __name__ == "__main__":
